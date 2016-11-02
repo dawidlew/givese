@@ -16,7 +16,7 @@ def general_dict(text):
         else:
             s1[letter] = (int(255 / len(s1)*3), int(255 / len(s1))*6, int(255 / len(s1)*9))
 
-    # przypisujemy pixele dla podanego wyrażenia
+    # przypisujemy pixele dla podanego zdania
     s2 = []
     for c in text:
         for k, p in s1.items():
@@ -47,9 +47,9 @@ def general_dict(text):
 
 
     create_one_file()
-    
 
-# tworzymy jeden plik wyjściowy z podanimy w zdaniu pixelami
+
+# tworzymy jeden plik wyjściowy z zmapowanymi pixelami
 def create_one_file():
 
     images = map(Image.open, glob.glob('pict/*.png'))
@@ -76,9 +76,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # if not args.text:
-    #     args.text = raw_input('Please input path and name of the file > ')
+    #     args.text = raw_input('Please input sentences to change > ')
 
     if not args.text:
-        args.text = 'Ta epopeja narodowa z elementami gawędy szlacheckiej powstała w latach 1832–1834 w Paryżu. Składa się z dwunastu ksiąg pisanych wierszem, trzynastozgłoskowym aleksandrynem polskim. Czas akcji: pięć dni z roku 1811 i dwa dni z roku 1812.'
+        args.text = 'dupa'
 
     general_dict(args.text)
