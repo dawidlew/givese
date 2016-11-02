@@ -14,7 +14,7 @@ def general_dict(text):
         if len(s1) == 0:
             s1[letter] = (int(255/1), int(255/1), int(255/1))
         else:
-            s1[letter] = (int(255 / len(s1)*3), int(255 / len(s1))*6, int(255 / len(s1)*9))
+            s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*10), int(255 / (len(s1))))
 
     # przypisujemy pixele dla podanego zdania
     s2 = []
@@ -49,7 +49,7 @@ def general_dict(text):
     create_one_file()
 
 
-# tworzymy jeden plik wyjściowy z zmapowanymi pixelami
+# tworzymy jeden plik wyjściowy ze zmapowanymi pixelami
 def create_one_file():
 
     images = map(Image.open, glob.glob('pict/*.png'))
@@ -79,6 +79,6 @@ if __name__ == "__main__":
     #     args.text = raw_input('Please input sentences to change > ')
 
     if not args.text:
-        args.text = 'dupa'
+        args.text = 'Sieć Lidl, należąca do koncernu Schwarz (podobnie jak Kaufland) przeprowadziła ostatnio badania marek własnych.'
 
     general_dict(args.text)
