@@ -25,10 +25,14 @@ def general_dict(text):
     for x in s2:
         print x
 
-    # usuwamy pliki z katalogu
-    filelist = glob.glob('pict/*.*')
-    for f in filelist:
-        os.remove(f)
+    # usuwamy pliki z katalogu lub tworzymy katalog
+    if os.path.isdir('pict/'):
+        filelist = glob.glob('pict/*.*')
+        for f in filelist:
+            os.remove(f)
+    else:
+        os.mkdir('pict')
+
 
     # zapełniamy katalog plikami
     char = 0
