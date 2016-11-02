@@ -45,7 +45,9 @@ def general_dict(text):
             char += 1
             i.save('pict/' + str(value) + '_' + str(char) + '.png')
 
+
     create_one_file()
+    
 
 # tworzymy jeden plik wyjściowy z podanimy w zdaniu pixelami
 def create_one_file():
