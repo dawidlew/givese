@@ -5,6 +5,7 @@ import string
 from PIL import Image
 import glob, os
 import os.path
+import time
 
 
 
@@ -19,9 +20,14 @@ def general_dict(text):
 
     # przypisujemy pixele dla podanego zdania
     s2 = []
+    y = 0
     for c in text:
         if c not in string.printable:
-            s2.append(['?', (255, 255, 255)])
+            if y == 0:
+                s2.append(['?', (1, 1, 1)])
+                y = 1
+            else:
+                y = 0
         else:
             for k, p in s1.items():
                 if k == c:
@@ -81,6 +87,6 @@ if __name__ == "__main__":
     #     args.text = raw_input('Please input sentences to change > ')
 
     if not args.text:
-        args.text = 'Robisz Refinement w trakcie Planowania?'
+        args.text = 'ąćś ?'
 
     general_dict(args.text)
