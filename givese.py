@@ -5,11 +5,27 @@ import string
 from PIL import Image
 import glob, os
 import os.path
-import time
+from flask import Flask, request, session, g, redirect, url_for, abort, \
+    render_template, flash, _app_ctx_stack, send_file
 
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def my_form():
+    return render_template("my-form.html")
+
+
+@app.route('/', methods=['POST'])
+def my_form_post():
+    text = request.form['text']
+    general_dict(text)
+    return send_file('pict/test.jpg')
 
 
 def general_dict(text):
+    error = None
     # tworzymy słownik z pixelami dla printable
     s1 = {}
     for letter in string.printable:
@@ -18,6 +34,12 @@ def general_dict(text):
         else:
             s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*5), int(255 / (len(s1))))
 
+    clear_dir()
+    make_dir_full(get_pixels_for_sentence(text, s1))
+    create_one_file()
+
+
+def get_pixels_for_sentence(text, s1):
     # przypisujemy pixele dla podanego zdania
     s2 = []
     y = 0
@@ -33,10 +55,10 @@ def general_dict(text):
             for k, p in s1.items():
                 if k == c:
                     s2.append([c, p])
+    return s2
 
-    for x in s2:
-        print x
 
+def clear_dir():
     # usuwamy pliki z katalogu lub tworzymy katalog
     if os.path.isdir('pict/'):
         filelist = glob.glob('pict/*.*')
@@ -45,31 +67,24 @@ def general_dict(text):
     else:
         os.mkdir('pict')
 
+
+def make_dir_full(s2):
     # zapełniamy katalog plikami
     char = 100 # dla poprawnego sortowania plików jak jest ich więcej niz 100, a prawie zawsze jest
     for value in s2:
         i = Image.new(mode='RGB', size=(20, 20), color=value[1])
-
         i.save('pict/' + str(char) + '.png')
-
         char += 1
-
-    create_one_file()
 
 
 # tworzymy jeden plik wyjściowy ze zmapowanymi pixelami
 def create_one_file():
-
     images = map(Image.open, glob.glob('pict/*.png'))
     widths, heights = zip(*(i.size for i in images))
-
     total_width = sum(widths)
     max_height = max(heights)
-
     new_im = Image.new('RGB', (total_width, max_height))
-
     x_offset = 0
-
     for im in images:
         new_im.paste(im, (x_offset, 0))
         x_offset += im.size[0]
@@ -77,17 +92,5 @@ def create_one_file():
     new_im.save('pict/test.jpg')
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--text", type=str,
-                        help="Text to convert",
-                        required=False)
-    args = parser.parse_args()
-
-    # if not args.text:
-    #     args.text = raw_input('Please input sentences to change > ')
-
-    if not args.text:
-        args.text = 'Pingwin urodził dziecko'
-
-    general_dict(args.text)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=802)
