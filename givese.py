@@ -16,13 +16,14 @@ def general_dict(text):
         if len(s1) == 0:
             s1[letter] = (int(255), int(255), int(255))
         else:
-            s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*10), int(255 / (len(s1))))
+            s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*5), int(255 / (len(s1))))
 
     # przypisujemy pixele dla podanego zdania
     s2 = []
     y = 0
     for c in text:
         if c not in string.printable:
+            # usuwanie podójnego wiersza dla dziwnych znakow
             if y == 0:
                 s2.append(['?', (1, 1, 1)])
                 y = 1
@@ -45,7 +46,7 @@ def general_dict(text):
         os.mkdir('pict')
 
     # zapełniamy katalog plikami
-    char = 100
+    char = 100 # dla poprawnego sortowania plików jak jest ich więcej niz 100, a prawie zawsze jest
     for value in s2:
         i = Image.new(mode='RGB', size=(20, 20), color=value[1])
 
@@ -87,6 +88,6 @@ if __name__ == "__main__":
     #     args.text = raw_input('Please input sentences to change > ')
 
     if not args.text:
-        args.text = 'ąćś ?'
+        args.text = 'Pingwin urodził dziecko'
 
     general_dict(args.text)
