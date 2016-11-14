@@ -1,6 +1,5 @@
 # coding=utf-8
 from __future__ import division
-import argparse
 import string
 from PIL import Image
 import glob, os
@@ -20,12 +19,15 @@ def my_form():
 @app.route('/', methods=['POST'])
 def my_form_post():
     text = request.form['text']
-    general_dict(text)
-    return send_file('pict/test.jpg')
+    if text is None:
+        return send_file('none.png')
+    else:
+        general_dict(text)
+        return send_file('pict/test.jpg')
 
 
 def general_dict(text):
-    error = None
+
     # tworzymy słownik z pixelami dla printable
     s1 = {}
     for letter in string.printable:
@@ -93,4 +95,4 @@ def create_one_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=802)
+    app.run(debug=True, host='0.0.0.0', port=803)

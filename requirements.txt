@@ -1,0 +1,4 @@
+###### Requirements for givese ######
+PIL
+glob
+flask
