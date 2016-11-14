@@ -6,7 +6,7 @@ import glob, os
 import os.path
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash, _app_ctx_stack, send_file
-
+import random
 
 app = Flask(__name__)
 
@@ -84,12 +84,14 @@ def create_one_file():
     images = map(Image.open, glob.glob('pict/*.png'))
     widths, heights = zip(*(i.size for i in images))
     total_width = sum(widths)
-    max_height = max(heights)
-    new_im = Image.new('RGB', (total_width, max_height))
-    x_offset = 0
+    total_height = sum(heights)
+    new_im = Image.new('RGB', (total_width, total_height), (255, 255, 255))
+    x = 0
+    y = 0
     for im in images:
-        new_im.paste(im, (x_offset, 0))
-        x_offset += im.size[0]
+        new_im.paste(im, (x, y))
+        x += im.size[0]
+        y = int(random.random() * 400)
 
     new_im.save('pict/test.jpg')
 
