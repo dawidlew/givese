@@ -10,10 +10,12 @@ all_pixels = []
 for x in range(width):
     for y in range(height):
         cpixel = pixels[x, y]
-        print cpixel
+        # print cpixel
         if cpixel == (0, 0, 0):
-            print 'dupa'
+            break
+        elif cpixel == (255, 255, 255):
+            break
         else:
             all_pixels.append(cpixel)
 
-# print all_pixels
+print all_pixels
