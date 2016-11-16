@@ -19,3 +19,6 @@ for x in range(width):
             all_pixels.append(cpixel)
 
 print all_pixels
+print all_pixels[1]
+
+
