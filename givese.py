@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import division
 import string
-from PIL import Image
+from PIL import Image, ImageDraw
 import glob, os
 import os.path
 from flask import Flask, request, session, g, redirect, url_for, abort, \
@@ -23,11 +23,10 @@ def my_form_post():
         return send_file('none.png')
     else:
         general_dict(text)
-        return send_file('pict/test.jpg')
-
+        # return send_file('pict/test.jpg')
+        return send_file('foo_new.png')
 
 def general_dict(text):
-
     # tworzymy słownik z pixelami dla printable
     s1 = {}
     for letter in string.printable:
@@ -36,9 +35,7 @@ def general_dict(text):
         else:
             s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*5), int(255 / (len(s1))))
 
-    clear_dir()
-    make_dir_full(get_pixels_for_sentence(text, s1))
-    create_one_file()
+    new_file(get_pixels_for_sentence(text, s1))
 
 
 def get_pixels_for_sentence(text, s1):
@@ -60,41 +57,39 @@ def get_pixels_for_sentence(text, s1):
     return s2
 
 
-def clear_dir():
-    # usuwamy pliki z katalogu lub tworzymy katalog
-    if os.path.isdir('pict/'):
-        filelist = glob.glob('pict/*.*')
-        for f in filelist:
-            os.remove(f)
-    else:
-        os.mkdir('pict')
+def new_file(s2):
 
+    i = Image.open("g.png")
 
-def make_dir_full(s2):
-    # zapełniamy katalog plikami
-    char = 100 # dla poprawnego sortowania plików jak jest ich więcej niz 100, a prawie zawsze jest
-    for value in s2:
-        i = Image.new(mode='RGB', size=(20, 20), color=value[1])
-        i.save('pict/' + str(char) + '.png')
-        char += 1
+    photo = i.convert('RGB')
 
+    pixels = photo.load()
+    width, height = photo.size
 
-# tworzymy jeden plik wyjściowy ze zmapowanymi pixelami
-def create_one_file():
-    images = map(Image.open, glob.glob('pict/*.png'))
-    widths, heights = zip(*(i.size for i in images))
-    total_width = sum(widths)
-    total_height = sum(heights)
-    new_im = Image.new('RGB', (total_width, total_height), (255, 255, 255))
-    x = 0
-    y = 0
-    for im in images:
-        new_im.paste(im, (x, y))
-        x += im.size[0]
-        y = int(random.random() * 400)
+    last = None
+    last2 = None
+    last3 = 0
+    new_im = Image.new('RGB', (width, height), (255, 255, 255))
 
-    new_im.save('pict/test.jpg')
+    for x in range(width):
+        for y in range(height):
+            if pixels[x, y] != (255, 255, 255):
+                # dla każdego powtarzającego sie RGB w tej samej linii przypisujemy nowe RGB w nowym pliku
+                if last == pixels[x, y]:
+                    if last2 == [x, y][0]:
+                        # wstawianie pixeli z podanego przez użytkownika zdania
+                        new_im.putpixel([x, y], s2[last3][1])
+                        # przypisujemy pixele tak długo, dopóki nie wyczerpiemy podanego zdania
+                        if last3 != len(s2)-1:
+                            last3 += 1
+
+                    last2 = [x, y][0]
+                last = pixels[x, y]
+
+    new_im.save("foo_new.png")
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=803)
+    # text = 'ale Tomek ma w Polsce na oku znacznie więcej osób, nie wszystkie są w rebelsach jawnie, nie wszystkie na stałe'
+    app.run(debug=True, host='0.0.0.0', port=804)
+    # general_dict(text)
