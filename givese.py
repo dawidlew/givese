@@ -80,16 +80,14 @@ def new_file(s2):
                         # wstawianie pixeli z podanego przez użytkownika zdania
                         new_im.putpixel([x, y], s2[last3][1])
                         # przypisujemy pixele tak długo, dopóki nie wyczerpiemy podanego zdania
-                        if last3 != len(s2)-1:
-                            last3 += 1
-
+                    elif last3 != len(s2)-1:
+                        last3 += 1
                     last2 = [x, y][0]
                 last = pixels[x, y]
-
     new_im.save("foo_new.png")
 
 
 if __name__ == '__main__':
-    # text = 'ale Tomek ma w Polsce na oku znacznie więcej osób, nie wszystkie są w rebelsach jawnie, nie wszystkie na stałe'
+    # text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
     app.run(debug=True, host='0.0.0.0', port=804)
     # general_dict(text)
