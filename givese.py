@@ -34,6 +34,8 @@ def general_dict(text):
         else:
             s1[letter] = (int(255 / (len(s1)/20)), int(255 / (len(s1))*5), int(255 / (len(s1))))
 
+    # print len(string.printable)
+
     new_file(get_pixels_for_sentence(text, s1))
 
 
@@ -60,7 +62,7 @@ def new_file(s2):
     path = r'p/'
     random_filename = random.choice([x for x in os.listdir(path)])
     i = Image.open('p/' + random_filename)
-    
+
     photo = i.convert('RGB')
 
     pixels = photo.load()
@@ -88,6 +90,6 @@ def new_file(s2):
 
 
 if __name__ == '__main__':
-    text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
-    # app.run(debug=True, host='0.0.0.0', port=804)
-    general_dict(text)
+    # text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
+    app.run(debug=True, host='0.0.0.0', port=804)
+    # general_dict(text)
