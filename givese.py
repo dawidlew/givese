@@ -2,11 +2,10 @@
 from __future__ import division
 import string
 from PIL import Image, ImageDraw
-import glob, os
-import os.path
+import glob, os, random, os.path
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash, _app_ctx_stack, send_file
-import random
+
 
 app = Flask(__name__)
 
@@ -58,9 +57,10 @@ def get_pixels_for_sentence(text, s1):
 
 
 def new_file(s2):
-
-    i = Image.open("g.png")
-
+    path = r'p/'
+    random_filename = random.choice([x for x in os.listdir(path)])
+    i = Image.open('p/' + random_filename)
+    
     photo = i.convert('RGB')
 
     pixels = photo.load()
@@ -88,6 +88,6 @@ def new_file(s2):
 
 
 if __name__ == '__main__':
-    # text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
-    app.run(debug=True, host='0.0.0.0', port=804)
-    # general_dict(text)
+    text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
+    # app.run(debug=True, host='0.0.0.0', port=804)
+    general_dict(text)

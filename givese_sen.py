@@ -97,4 +97,6 @@ def create_one_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=803)
+    text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
+    # app.run(debug=True, host='0.0.0.0', port=804)
+    general_dict(text)
