@@ -76,8 +76,8 @@ def open_file(pixels_string_printable):
                         image_letter.append(letter)
                     last = letter
 
-    print image_letter
-
+    print_sentence = ''.join(image_letter)
+    print print_sentence
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0', port=804)
