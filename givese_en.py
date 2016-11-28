@@ -25,6 +25,7 @@ def my_form_post():
         # return send_file('pict/test.jpg')
         return send_file('foo_new.png')
 
+
 def general_dict(text):
     # tworzymy słownik z pixelami dla printable
     s1 = {}
@@ -33,8 +34,6 @@ def general_dict(text):
             s1[letter] = (int(255), int(255), int(255))
         else:
             s1[letter] = (int(len(s1)*2), int(len(s1)*1), int(len(s1)*2))
-
-
 
     new_file(get_pixels_for_sentence(text, s1))
 
@@ -92,6 +91,6 @@ def new_file(s2):
 
 
 if __name__ == '__main__':
-    text = 'Skomentuj Jak zostać świetnym Scrum Masterem? Przeczytać Geoffa Wattsa, którego autorem jest Jakub Szczepanik'
+    text = 'Dawwwwwid'
     # app.run(debug=True, host='0.0.0.0', port=804)
     general_dict(text)
