@@ -4,10 +4,13 @@ import string
 from PIL import Image, ImageDraw
 import glob, os, random, os.path
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash, _app_ctx_stack, send_file
-
+    render_template, flash, _app_ctx_stack, send_file, Response
+import urllib
+import json
 
 app = Flask(__name__)
+
+file = 'foo_new.png'
 
 
 @app.route('/')
@@ -18,20 +21,35 @@ def my_form():
 @app.route('/', methods=['POST'])
 def my_form_post():
     text = request.form['text']
-    if text is None:
-        return send_file('none.png')
-    else:
-        g2_dict(text)
-        return send_file('foo_new.png')
+    g2_dict(text, False)
+    return send_file('foo_new.png')
 
 
+# podajemy do aplikacji zdjęcie z otrzymanej sentencji
+@app.route('/api/<string:text>')
+def my_form_post_api(text):
+    return g2_dict(text, True)
+
+
+# z zapisanego zdjęcia robimy podaną sentencję na WWW
 @app.route('/text', methods=['GET'])
 def get_data():
     x = open_file()
     return x, 200, {'Content-Type': 'text/html; charset=utf-8'}
 
 
-def g2_dict(text):
+# konwersja podanego ciągu na zdjęcie, zapis i robimy podaną sentencję na aplikację
+@app.route('/text/api/<string:text>')
+def get_data_api(text):
+    fh = open("imageToSave.png", "wb")
+    fh.write(text.decode('base64'))
+    fh.close()
+
+    x = open_file()
+    return x, 200, {'Content-Type': 'text/html; charset=utf-8'}
+
+
+def g2_dict(text, as_json=False):
     # tworzymy słownik z pixelami dla printable
     s1 = {}
     for letter in string.printable:
@@ -41,6 +59,12 @@ def g2_dict(text):
             s1[letter] = (int(len(s1)*2), int(len(s1)*1), int(len(s1)*2))
 
     new_file(get_pixels_for_sentence(text, s1))
+
+    if as_json:
+        data = urllib.urlopen(file).read()
+        dat = json.dumps(data.encode('base64'))
+        res = Response(response=dat, status=200, mimetype="application/json")
+        return res
 
 
 def get_pixels_for_sentence(text, s1):
@@ -91,7 +115,7 @@ def new_file(s2):
                         last3 += 1
                     last2 = [x, y][0]
                 last = pixels[x, y]
-    new_im.save("foo_new.png")
+    new_im.save(file)
 
 
 def g1_dict():
@@ -107,7 +131,7 @@ def g1_dict():
 
 
 def open_file():
-    photo = Image.open('foo_new.png')
+    photo = Image.open(file)
     photo = photo.convert('RGB')
     pixels = photo.load()
     width = photo.size[0]
@@ -141,7 +165,6 @@ def open_file():
                     last = letter
 
     sentence = ''.join(image_letter)
-    print sentence
     return sentence
 
 
